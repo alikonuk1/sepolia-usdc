@@ -10,5 +10,4 @@ contract mockUSDCTest is Test {
     function setUp() public {
         usdc = new mockUSDC();
     }
-
 }

@@ -28,9 +28,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
 
     // solhint-disable-next-line var-name-mixedcase
     bytes32 private constant _PERMIT_TYPEHASH =
-        keccak256(
-            "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
-        );
+        keccak256("Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)");
     /**
      * @dev In previous versions `_PERMIT_TYPEHASH` was declared as `immutable`.
      * However, to ensure consistency with the upgradeable transpiler, we will continue
@@ -50,27 +48,14 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     /**
      * @dev See {IERC20Permit-permit}.
      */
-    function permit(
-        address owner,
-        address spender,
-        uint256 value,
-        uint256 deadline,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    ) public virtual override {
+    function permit(address owner, address spender, uint256 value, uint256 deadline, uint8 v, bytes32 r, bytes32 s)
+        public
+        virtual
+        override
+    {
         require(block.timestamp <= deadline, "ERC20Permit: expired deadline");
 
-        bytes32 structHash = keccak256(
-            abi.encode(
-                _PERMIT_TYPEHASH,
-                owner,
-                spender,
-                value,
-                _useNonce(owner),
-                deadline
-            )
-        );
+        bytes32 structHash = keccak256(abi.encode(_PERMIT_TYPEHASH, owner, spender, value, _useNonce(owner), deadline));
 
         bytes32 hash = _hashTypedDataV4(structHash);
 
@@ -83,9 +68,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
     /**
      * @dev See {IERC20Permit-nonces}.
      */
-    function nonces(
-        address owner
-    ) public view virtual override returns (uint256) {
+    function nonces(address owner) public view virtual override returns (uint256) {
         return _nonces[owner].current();
     }
 
@@ -102,9 +85,7 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
      *
      * _Available since v4.1._
      */
-    function _useNonce(
-        address owner
-    ) internal virtual returns (uint256 current) {
+    function _useNonce(address owner) internal virtual returns (uint256 current) {
         Counters.Counter storage nonce = _nonces[owner];
         current = nonce.current();
         nonce.increment();
@@ -112,13 +93,36 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
 }
 
 contract mockUSDC is ERC20Permit {
+    using ECDSA for bytes32;
 
-    constructor() ERC20("SepoliaUsdc", "USDC") ERC20Permit("SepoliaUsdc") {
-    }
+    bytes32 internal constant templateId =
+        0x53fde3c9837fda1a4a9b990da67de30f4024d47a40c821e0e8f8079b67ea605d;
+    address internal constant airnode =
+        0xf64C92bb13a9Ac7EE3448cD45398A33cE85634F1;
+    
+    constructor() ERC20("SepoliaUsdc", "USDC") ERC20Permit("SepoliaUsdc") {}
 
-    function mint(address recipient) public payable {
-        require(msg.value < 10 ** 7, "ETH must be lower than 7 decimals");
-        _mint(recipient, msg.value);
+    function mint(
+        address recipient,
+        uint256 timestamp,
+        bytes calldata data,
+        bytes calldata signature
+    ) public payable {
+        require(msg.value > 0, "Must send some ETH!");
+        require(data.length == 32, "Data length is not correct!");
+        require(!(timestamp > block.timestamp || timestamp + 60 <= block.timestamp), "Out of date price");
+        require(
+            (keccak256(abi.encodePacked(templateId, timestamp, data))).recover(signature) == airnode,
+            "Signature Mismatch"
+        );
+
+        int256 price = abi.decode(data, (int256));
+
+        uint256 tokensToMint = (msg.value * uint256(price)) / (10 ** 12);
+
+        require(tokensToMint > 0, "Sent ETH amount too small to mint any tokens.");
+
+        _mint(recipient, tokensToMint);
     }
 
     function decimals() public view virtual override returns (uint8) {
