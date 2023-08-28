@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC20/extensions/draft-IERC20Permit.sol";
-import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
-import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
-import "@openzeppelin/contracts/utils/cryptography/EIP712.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "lib/openzeppelin-contracts/contracts/token/ERC20/extensions/draft-IERC20Permit.sol";
+import "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
+import "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol";
+import "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol";
+import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
 
 // It is not possible to override the EIP712 version of
 // @openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol
@@ -112,8 +112,13 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
 }
 
 contract mockUSDC is ERC20Permit {
-    constructor(address recipient) ERC20("Token", "TKN") ERC20Permit("Token") {
-        _mint(recipient, 1e9 * 10 ** decimals());
+
+    constructor() ERC20("SepoliaUsdc", "USDC") ERC20Permit("SepoliaUsdc") {
+    }
+
+    function mint(address recipient) public payable {
+        require(msg.value < 10 ** 7, "ETH must be lower than 7 decimals");
+        _mint(recipient, msg.value);
     }
 
     function decimals() public view virtual override returns (uint8) {
