@@ -20,29 +20,14 @@
       "additionalContracts": []
     }
   ],
-  "receipts": [
-    {
-      "transactionHash": "0xff73aecbfc0d9cd66cb3cb035bb8656aa3f1fec8abe18d3d07faf8dd2bc9be49",
-      "transactionIndex": "0xa",
-      "blockHash": "0xb11ea2f3359f968f7d1a481e1118fbaf7054a22d37b4dcdbc5cb9a0f8b2284a4",
-      "blockNumber": "0x3fd325",
-      "from": "0x2B68407d77B044237aE7f99369AA0347Ca44B129",
-      "to": null,
-      "cumulativeGasUsed": "0x629c5e",
-      "gasUsed": "0x170a4e",
-      "contractAddress": "0xDC705CdD8bf62b0AfD14a980AA10D2F4AeAB4E2A",
-      "logs": [],
-      "status": "0x1",
-      "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
-      "type": "0x2",
-      "effectiveGasPrice": "0xb3283cb1"
-    }
-  ],
+  "receipts": [],
   "libraries": [],
-  "pending": [],
+  "pending": [
+    "0xff73aecbfc0d9cd66cb3cb035bb8656aa3f1fec8abe18d3d07faf8dd2bc9be49"
+  ],
   "path": "/Users/alikonuk/Documents/dev/api3/usdc-faucet/broadcast/mockUSDC.s.sol/11155111/run-latest.json",
   "returns": {},
-  "timestamp": 1693290700,
+  "timestamp": 1693290647,
   "chain": 11155111,
   "multi": false,
   "commit": "cbb16c7"
