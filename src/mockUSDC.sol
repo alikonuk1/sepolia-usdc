@@ -99,7 +99,6 @@ contract mockUSDC is ERC20Permit {
         0x4385954e058fbe6b6a744f32a4f89d67aad099f8fb8b23e7ea8dd366ae88151d;
     address internal constant airnode =
         0xf64C92bb13a9Ac7EE3448cD45398A33cE85634F1;
-    address public treasury;
 
     mapping(address => bool) public isWithdrawer;
     

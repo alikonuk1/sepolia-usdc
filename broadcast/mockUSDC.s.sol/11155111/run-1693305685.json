@@ -42,7 +42,7 @@
   "pending": [],
   "path": "/Users/alikonuk/Documents/dev/api3/usdc-faucet/broadcast/mockUSDC.s.sol/11155111/run-latest.json",
   "returns": {},
-  "timestamp": 1693305729,
+  "timestamp": 1693305685,
   "chain": 11155111,
   "multi": false,
   "commit": "f32efa5"
