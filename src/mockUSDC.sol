@@ -96,18 +96,28 @@ contract mockUSDC is ERC20Permit {
     using ECDSA for bytes32;
 
     bytes32 internal constant templateId =
-        0x53fde3c9837fda1a4a9b990da67de30f4024d47a40c821e0e8f8079b67ea605d;
+        0x4385954e058fbe6b6a744f32a4f89d67aad099f8fb8b23e7ea8dd366ae88151d;
     address internal constant airnode =
         0xf64C92bb13a9Ac7EE3448cD45398A33cE85634F1;
+    address public treasury;
+
+    mapping(address => bool) public isWithdrawer;
     
-    constructor() ERC20("SepoliaUsdc", "USDC") ERC20Permit("SepoliaUsdc") {}
+    constructor() ERC20("SepoliaUsdc", "testUSDC") ERC20Permit("SepoliaUsdc") {
+        isWithdrawer[msg.sender] = true;
+    }
+
+    modifier onlyWithdrawer() {
+        require(isWithdrawer[msg.sender], "Forbidden");
+        _;
+    }
 
     function mint(
         address recipient,
         uint256 timestamp,
         bytes calldata data,
         bytes calldata signature
-    ) public payable {
+    ) external payable {
         require(msg.value > 0, "Must send some ETH!");
         require(data.length == 32, "Data length is not correct!");
         require(!(timestamp > block.timestamp || timestamp + 60 <= block.timestamp), "Out of date price");
@@ -127,5 +137,14 @@ contract mockUSDC is ERC20Permit {
 
     function decimals() public view virtual override returns (uint8) {
         return 6;
+    }
+
+    function addWithdrawer(address _withdrawer) external onlyWithdrawer {
+        isWithdrawer[_withdrawer] = true;
+    }
+
+    function withdraw() external onlyWithdrawer {
+        (bool sent,) = msg.sender.call{value: address(this).balance}("");
+        require(sent, "Failed to send Ether");
     }
 }
