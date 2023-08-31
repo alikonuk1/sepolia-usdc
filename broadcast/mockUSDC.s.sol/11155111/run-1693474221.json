@@ -20,45 +20,14 @@
       "additionalContracts": []
     }
   ],
-  "receipts": [
-    {
-      "transactionHash": "0x74ca39c4059090b0ee440a4edd7e72887b47fc2c7bcb7dc824d8c599072a5e7b",
-      "transactionIndex": "0x3",
-      "blockHash": "0xa222fe5c4fe6fef88d458058eb52441cfae6a1f402efe484abb1e6984b3aa1a8",
-      "blockNumber": "0x4009ab",
-      "from": "0x2B68407d77B044237aE7f99369AA0347Ca44B129",
-      "to": null,
-      "cumulativeGasUsed": "0x349ea1",
-      "gasUsed": "0x175176",
-      "contractAddress": "0xbb0eC508592a6670033D0359a5Df2A3BaE6A1684",
-      "logs": [
-        {
-          "address": "0xbb0eC508592a6670033D0359a5Df2A3BaE6A1684",
-          "topics": [
-            "0x8be0079c531659141344cd1fd0a4f28419497f9722a3daafe3b4186f6b6457e0",
-            "0x0000000000000000000000000000000000000000000000000000000000000000",
-            "0x0000000000000000000000002b68407d77b044237ae7f99369aa0347ca44b129"
-          ],
-          "data": "0x",
-          "blockHash": "0xa222fe5c4fe6fef88d458058eb52441cfae6a1f402efe484abb1e6984b3aa1a8",
-          "blockNumber": "0x4009ab",
-          "transactionHash": "0x74ca39c4059090b0ee440a4edd7e72887b47fc2c7bcb7dc824d8c599072a5e7b",
-          "transactionIndex": "0x3",
-          "logIndex": "0x5",
-          "removed": false
-        }
-      ],
-      "status": "0x1",
-      "logsBloom": "0x00000000000000000000000200000000000000000000000000800000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000020000000000000000000800000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000004000000000000000000000000000000050",
-      "type": "0x2",
-      "effectiveGasPrice": "0xb2d0a2e6"
-    }
-  ],
+  "receipts": [],
   "libraries": [],
-  "pending": [],
+  "pending": [
+    "0x74ca39c4059090b0ee440a4edd7e72887b47fc2c7bcb7dc824d8c599072a5e7b"
+  ],
   "path": "/Users/alikonuk/Documents/dev/api3/usdc-faucet/broadcast/mockUSDC.s.sol/11155111/run-latest.json",
   "returns": {},
-  "timestamp": 1693474272,
+  "timestamp": 1693474221,
   "chain": 11155111,
   "multi": false,
   "commit": "93907fd"

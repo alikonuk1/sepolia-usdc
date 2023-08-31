@@ -6,6 +6,7 @@ import "lib/openzeppelin-contracts/contracts/token/ERC20/ERC20.sol";
 import "lib/openzeppelin-contracts/contracts/utils/cryptography/ECDSA.sol";
 import "lib/openzeppelin-contracts/contracts/utils/cryptography/EIP712.sol";
 import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
+import "lib/openzeppelin-contracts/contracts/access/Ownable.sol";
 
 // It is not possible to override the EIP712 version of
 // @openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol
@@ -21,7 +22,7 @@ import "lib/openzeppelin-contracts/contracts/utils/Counters.sol";
  *
  * _Available since v3.4._
  */
-abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712 {
+abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712, Ownable {
     using Counters for Counters.Counter;
 
     mapping(address => Counters.Counter) private _nonces;
@@ -100,19 +101,10 @@ contract mockUSDC is ERC20Permit {
     address internal constant airnode =
         0xf64C92bb13a9Ac7EE3448cD45398A33cE85634F1;
 
-    mapping(address => bool) public isWithdrawer;
-    
     constructor() ERC20("SepoliaUsdc", "testUSDC") ERC20Permit("SepoliaUsdc") {
-        isWithdrawer[msg.sender] = true;
-    }
-
-    modifier onlyWithdrawer() {
-        require(isWithdrawer[msg.sender], "Forbidden");
-        _;
     }
 
     function mint(
-        address recipient,
         uint256 timestamp,
         bytes calldata data,
         bytes calldata signature
@@ -131,18 +123,14 @@ contract mockUSDC is ERC20Permit {
 
         require(tokensToMint > 0, "Sent ETH amount too small to mint any tokens.");
 
-        _mint(recipient, tokensToMint);
+        _mint(msg.sender, tokensToMint);
     }
 
     function decimals() public view virtual override returns (uint8) {
         return 6;
     }
 
-    function addWithdrawer(address _withdrawer) external onlyWithdrawer {
-        isWithdrawer[_withdrawer] = true;
-    }
-
-    function withdraw() external onlyWithdrawer {
+    function withdraw() external onlyOwner {
         (bool sent,) = msg.sender.call{value: address(this).balance}("");
         require(sent, "Failed to send Ether");
     }
