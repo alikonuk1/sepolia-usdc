@@ -96,10 +96,12 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712, Ownable {
 contract mockUSDC is ERC20Permit {
     using ECDSA for bytes32;
 
+    receive() external payable {}
+
     bytes32 internal constant templateId =
-        0x4385954e058fbe6b6a744f32a4f89d67aad099f8fb8b23e7ea8dd366ae88151d;
+        0x154c34adf151cf4d91b7abe7eb6dcd193104ef2a29738ddc88020a58d6cf6183;
     address internal constant airnode =
-        0xf64C92bb13a9Ac7EE3448cD45398A33cE85634F1;
+        0xc52EeA00154B4fF1EbbF8Ba39FDe37F1AC3B9Fd4;
 
     constructor() ERC20("SepoliaUsdc", "testUSDC") ERC20Permit("SepoliaUsdc") {
     }
@@ -109,17 +111,18 @@ contract mockUSDC is ERC20Permit {
         bytes calldata data,
         bytes calldata signature
     ) external payable {
-        require(msg.value > 0, "Must send some ETH!");
         require(data.length == 32, "Data length is not correct!");
-        require(!(timestamp > block.timestamp || timestamp + 60 <= block.timestamp), "Out of date price");
+        require(!(timestamp > block.timestamp || timestamp + 300 <= block.timestamp), "Out of date price");
         require(
-            (keccak256(abi.encodePacked(templateId, timestamp, data))).recover(signature) == airnode,
+            (keccak256(abi.encodePacked(templateId, timestamp, data)).toEthSignedMessageHash()).recover(signature) == airnode,
             "Signature Mismatch"
         );
 
         int256 price = abi.decode(data, (int256));
 
-        uint256 tokensToMint = (msg.value * uint256(price)) / (10 ** 12);
+        require(price > 0, "Price must be positive!");
+
+        uint256 tokensToMint = (msg.value * uint256(price)) / (10 ** 30);
 
         require(tokensToMint > 0, "Sent ETH amount too small to mint any tokens.");
 
